@@ -14,7 +14,84 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_users: {
+        Row: {
+          created_at: string
+          id: string
+          password_hash: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          password_hash: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          password_hash?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      announcements: {
+        Row: {
+          created_at: string
+          id: string
+          is_pinned: boolean
+          message: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_pinned?: boolean
+          message: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_pinned?: boolean
+          message?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      materials: {
+        Row: {
+          category: Database["public"]["Enums"]["material_category"]
+          created_at: string
+          google_drive_link: string
+          id: string
+          title: string
+          updated_at: string
+          upload_date: string
+          view_count: number
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["material_category"]
+          created_at?: string
+          google_drive_link: string
+          id?: string
+          title: string
+          updated_at?: string
+          upload_date?: string
+          view_count?: number
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["material_category"]
+          created_at?: string
+          google_drive_link?: string
+          id?: string
+          title?: string
+          updated_at?: string
+          upload_date?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +100,12 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      material_category:
+        | "Lesson Notes"
+        | "Geography Books"
+        | "Exams"
+        | "Results"
+        | "Statistics"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +232,14 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      material_category: [
+        "Lesson Notes",
+        "Geography Books",
+        "Exams",
+        "Results",
+        "Statistics",
+      ],
+    },
   },
 } as const
