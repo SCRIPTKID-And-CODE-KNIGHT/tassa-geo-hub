@@ -6,6 +6,7 @@ import { MaterialDialog } from "@/components/MaterialDialog";
 import { AdminLogin } from "@/components/AdminLogin";
 import { AnnouncementBanner } from "@/components/AnnouncementBanner";
 import { AnnouncementDialog } from "@/components/AnnouncementDialog";
+import { CreateAdminDialog } from "@/components/CreateAdminDialog";
 import { DashboardStats } from "@/components/DashboardStats";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ThemeProvider } from "next-themes";
@@ -141,6 +142,7 @@ const Index = () => {
               <div className="flex flex-wrap gap-2">
                 <MaterialDialog onSuccess={fetchMaterials} />
                 <AnnouncementDialog onSuccess={fetchMaterials} />
+                <CreateAdminDialog />
               </div>
               <DashboardStats />
             </div>

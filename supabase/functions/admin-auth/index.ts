@@ -1,5 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import * as bcrypt from 'https://deno.land/x/bcrypt@v0.4.1/mod.ts'
+import { hash, compare } from 'https://deno.land/x/bcrypt@v0.4.1/mod.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { action, username, password, materialData, announcementData, materialId, announcementId } = await req.json()
+    const { action, username, password, materialData, announcementData, materialId, announcementId, newUsername, newPassword } = await req.json()
 
     switch (action) {
       case 'login':
@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
           .eq('username', username)
           .single()
 
-        if (!adminUser || !await bcrypt.compare(password, adminUser.password_hash)) {
+        if (!adminUser || !await compare(password, adminUser.password_hash)) {
           return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
             status: 401,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -81,6 +81,17 @@ Deno.serve(async (req) => {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })
 
+      case 'update_announcement':
+        const { error: updateAnnError } = await supabaseClient
+          .from('announcements')
+          .update(announcementData)
+          .eq('id', announcementId)
+
+        if (updateAnnError) throw updateAnnError
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+
       case 'delete_announcement':
         const { error: deleteAnnError } = await supabaseClient
           .from('announcements')
@@ -88,6 +99,20 @@ Deno.serve(async (req) => {
           .eq('id', announcementId)
 
         if (deleteAnnError) throw deleteAnnError
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+
+      case 'create_admin':
+        const hashedPassword = await hash(newPassword)
+        const { error: createAdminError } = await supabaseClient
+          .from('admin_users')
+          .insert({
+            username: newUsername,
+            password_hash: hashedPassword
+          })
+
+        if (createAdminError) throw createAdminError
         return new Response(JSON.stringify({ success: true }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })

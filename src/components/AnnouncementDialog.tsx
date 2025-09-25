@@ -7,14 +7,25 @@ import { Megaphone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
-interface AnnouncementDialogProps {
-  onSuccess: () => void;
+interface Announcement {
+  id: string;
+  message: string;
+  is_pinned: boolean;
+  created_at: string;
 }
 
-export function AnnouncementDialog({ onSuccess }: AnnouncementDialogProps) {
+interface AnnouncementDialogProps {
+  onSuccess: () => void;
+  announcement?: Announcement;
+  triggerButton?: React.ReactNode;
+}
+
+export function AnnouncementDialog({ onSuccess, announcement, triggerButton }: AnnouncementDialogProps) {
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(announcement?.message || '');
   const [loading, setLoading] = useState(false);
+  
+  const isEditing = !!announcement;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,22 +34,23 @@ export function AnnouncementDialog({ onSuccess }: AnnouncementDialogProps) {
     try {
       const { error } = await supabase.functions.invoke('admin-auth', {
         body: {
-          action: 'create_announcement',
+          action: isEditing ? 'update_announcement' : 'create_announcement',
           announcementData: {
             message,
             is_pinned: true,
-          }
+          },
+          announcementId: announcement?.id
         }
       });
 
       if (error) throw error;
 
       toast({
-        title: 'Announcement posted successfully',
+        title: isEditing ? 'Announcement updated successfully' : 'Announcement posted successfully',
       });
 
       setOpen(false);
-      setMessage('');
+      if (!isEditing) setMessage('');
       onSuccess();
     } catch (error) {
       toast({
@@ -54,14 +66,16 @@ export function AnnouncementDialog({ onSuccess }: AnnouncementDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <Megaphone className="w-4 h-4 mr-2" />
-          Post Announcement
-        </Button>
+        {triggerButton || (
+          <Button>
+            <Megaphone className="w-4 h-4 mr-2" />
+            Post Announcement
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Post New Announcement</DialogTitle>
+          <DialogTitle>{isEditing ? 'Edit Announcement' : 'Post New Announcement'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -77,7 +91,7 @@ export function AnnouncementDialog({ onSuccess }: AnnouncementDialogProps) {
           </div>
 
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? 'Posting...' : 'Post Announcement'}
+            {loading ? (isEditing ? 'Updating...' : 'Posting...') : (isEditing ? 'Update Announcement' : 'Post Announcement')}
           </Button>
         </form>
       </DialogContent>

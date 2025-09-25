@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { X, Megaphone } from "lucide-react";
+import { X, Megaphone, Edit } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { AnnouncementDialog } from "./AnnouncementDialog";
 
 interface Announcement {
   id: string;
@@ -15,6 +16,20 @@ interface AnnouncementBannerProps {
   isAdmin?: boolean;
   onRefresh?: () => void;
 }
+
+const EditAnnouncementDialog = ({ announcement, onSuccess }: { announcement: Announcement, onSuccess: () => void }) => {
+  return (
+    <AnnouncementDialog 
+      announcement={announcement}
+      onSuccess={onSuccess}
+      triggerButton={
+        <Button size="sm" variant="ghost">
+          <Edit className="w-4 h-4" />
+        </Button>
+      }
+    />
+  );
+};
 
 export function AnnouncementBanner({ isAdmin, onRefresh }: AnnouncementBannerProps) {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -63,13 +78,22 @@ export function AnnouncementBanner({ isAdmin, onRefresh }: AnnouncementBannerPro
           <AlertDescription className="flex justify-between items-center">
             <span>{announcement.message}</span>
             {isAdmin && (
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => deleteAnnouncement(announcement.id)}
-              >
-                <X className="w-4 h-4" />
-              </Button>
+              <div className="flex gap-1">
+                <EditAnnouncementDialog 
+                  announcement={announcement}
+                  onSuccess={() => {
+                    fetchAnnouncements();
+                    onRefresh?.();
+                  }}
+                />
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => deleteAnnouncement(announcement.id)}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
             )}
           </AlertDescription>
         </Alert>
