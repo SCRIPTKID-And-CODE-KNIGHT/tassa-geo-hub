@@ -22,13 +22,29 @@ Deno.serve(async (req) => {
     switch (action) {
       case 'login':
         // Authenticate admin
-        const { data: adminUser } = await supabaseClient
+        console.log('Login attempt for username:', username)
+        
+        const { data: adminUser, error: fetchError } = await supabaseClient
           .from('admin_users')
           .select('*')
           .eq('username', username)
           .single()
 
-        if (!adminUser || !await compare(password, adminUser.password_hash)) {
+        console.log('Fetch result:', { adminUser, fetchError })
+
+        if (fetchError || !adminUser) {
+          console.log('User not found or fetch error')
+          return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
+            status: 401,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          })
+        }
+
+        const passwordMatch = await compare(password, adminUser.password_hash)
+        console.log('Password comparison result:', passwordMatch)
+
+        if (!passwordMatch) {
+          console.log('Password does not match')
           return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
             status: 401,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
