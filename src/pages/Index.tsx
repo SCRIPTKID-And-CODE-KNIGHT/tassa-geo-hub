@@ -113,12 +113,21 @@ const Index = () => {
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <div className="min-h-screen bg-background">
         {/* Header */}
-        <header className="border-b bg-card">
-          <div className="container mx-auto px-4 py-4">
+        <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+          <div className="container mx-auto px-4 py-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <h1 className="text-2xl font-bold text-primary">TASSA Materials Portal</h1>
-                <span className="text-sm text-muted-foreground">Geography Department</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold text-xl shadow-lg">
+                    T
+                  </div>
+                  <div>
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                      TASSA Materials Portal
+                    </h1>
+                    <span className="text-sm text-muted-foreground">Geography Department</span>
+                  </div>
+                </div>
               </div>
               <div className="flex items-center space-x-2">
                 <ThemeToggle />
@@ -166,15 +175,16 @@ const Index = () => {
           <AdSenseUnit />
 
           {/* Materials Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredMaterials.map((material) => (
-              <MaterialCard
-                key={material.id}
-                material={material}
-                isAdmin={isAdmin}
-                onEdit={setEditingMaterial}
-                onDelete={handleDelete}
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+            {filteredMaterials.map((material, index) => (
+              <div key={material.id} style={{ animationDelay: `${index * 0.05}s` }}>
+                <MaterialCard
+                  material={material}
+                  isAdmin={isAdmin}
+                  onEdit={setEditingMaterial}
+                  onDelete={handleDelete}
+                />
+              </div>
             ))}
           </div>
 
