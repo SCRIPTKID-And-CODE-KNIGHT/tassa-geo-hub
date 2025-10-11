@@ -11,6 +11,7 @@ import { DashboardStats } from "@/components/DashboardStats";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ThemeProvider } from "next-themes";
 import { toast } from "@/hooks/use-toast";
+import { AdSenseUnit } from "@/components/AdSenseUnit";
 
 interface Material {
   id: string;
@@ -128,6 +129,9 @@ const Index = () => {
         </header>
 
         <div className="container mx-auto px-4 py-6">
+          {/* AdSense - Top of page */}
+          <AdSenseUnit format="horizontal" />
+          
           {/* Announcements */}
           <div className="mb-6">
             <AnnouncementBanner 
@@ -158,6 +162,9 @@ const Index = () => {
             setSortOrder={setSortOrder}
           />
 
+          {/* AdSense - Before content */}
+          <AdSenseUnit />
+
           {/* Materials Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredMaterials.map((material) => (
@@ -176,6 +183,9 @@ const Index = () => {
               <p className="text-muted-foreground">No materials found matching your criteria.</p>
             </div>
           )}
+
+          {/* AdSense - After content */}
+          <AdSenseUnit />
         </div>
 
         {/* Edit Material Dialog */}
