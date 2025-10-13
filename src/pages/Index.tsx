@@ -13,6 +13,9 @@ import { ThemeProvider } from "next-themes";
 import { toast } from "@/hooks/use-toast";
 import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { VisitorCounter } from "@/components/VisitorCounter";
+import heroBackground from "@/assets/hero-background.jpg";
+import geographyIcon from "@/assets/geography-icon.png";
+import patternBackground from "@/assets/pattern-background.png";
 
 interface Material {
   id: string;
@@ -112,21 +115,32 @@ const Index = () => {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background relative">
+        {/* Background Pattern */}
+        <div 
+          className="fixed inset-0 opacity-5 pointer-events-none"
+          style={{ 
+            backgroundImage: `url(${patternBackground})`,
+            backgroundSize: '400px 400px',
+            backgroundRepeat: 'repeat'
+          }}
+        />
         {/* Header */}
-        <header className="border-b bg-card/50 backdrop-blur-md sticky top-0 z-50 shadow-lg">
+        <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-50 shadow-lg relative">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center space-x-4">
                 <div className="flex items-center gap-3 animate-fade-in">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary via-accent to-primary animate-[gradient_3s_ease_infinite] flex items-center justify-center text-primary-foreground font-bold text-2xl shadow-xl ring-2 ring-primary/20">
-                    T
-                  </div>
+                  <img 
+                    src={geographyIcon} 
+                    alt="TASSA Geography" 
+                    className="w-12 h-12 rounded-xl shadow-xl ring-2 ring-primary/20 hover:scale-110 transition-transform"
+                  />
                   <div>
                     <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-[gradient_3s_ease_infinite]">
                       TASSA Materials Portal
                     </h1>
-                    <span className="text-xs md:text-sm text-muted-foreground font-medium">Geography Department</span>
+                    <span className="text-xs md:text-sm text-muted-foreground font-medium">Geography Department Resources</span>
                   </div>
                 </div>
               </div>
@@ -139,7 +153,30 @@ const Index = () => {
           </div>
         </header>
 
-        <div className="container mx-auto px-4 py-6">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden">
+          <div 
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: `url(${heroBackground})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
+          <div className="container mx-auto px-4 py-12 relative z-10">
+            <div className="text-center space-y-4 animate-fade-in">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Explore Geography Materials
+              </h2>
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                Access comprehensive educational resources, exam materials, and study guides for geography students and educators
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div className="container mx-auto px-4 py-6 relative z-10">
           {/* AdSense - Top of page */}
           <AdSenseUnit format="horizontal" />
           
@@ -177,6 +214,10 @@ const Index = () => {
           <AdSenseUnit />
 
           {/* Materials Grid */}
+          <div className="mb-6">
+            <h3 className="text-2xl font-bold mb-2">Available Materials</h3>
+            <p className="text-muted-foreground mb-6">Browse and download geography resources</p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             {filteredMaterials.map((material, index) => (
               <div key={material.id} style={{ animationDelay: `${index * 0.05}s` }}>
@@ -197,14 +238,40 @@ const Index = () => {
           )}
           
           {/* Additional content for language detection */}
-          <footer className="mt-12 pt-8 border-t">
-            <div className="text-center space-y-4">
-              <h2 className="text-xl font-semibold">About TASSA Materials Portal</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Welcome to the TASSA Geography Department Materials Portal. This platform provides access to educational resources, study materials, and geographic information for students and educators. Browse our comprehensive collection of geography materials organized by category.
+          <footer className="mt-16 pt-8 border-t bg-gradient-to-b from-transparent to-muted/20">
+            <div className="text-center space-y-6 pb-8">
+              <div className="flex justify-center mb-4">
+                <img 
+                  src={geographyIcon} 
+                  alt="TASSA Geography" 
+                  className="w-16 h-16 rounded-xl shadow-lg"
+                />
+              </div>
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                About TASSA Materials Portal
+              </h2>
+              <p className="text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                Welcome to the TASSA Geography Department Materials Portal. This platform provides access to educational resources, study materials, and geographic information for students and educators. Browse our comprehensive collection of geography materials organized by category including lesson notes, textbooks, examination papers, and statistical data.
               </p>
-              <p className="text-sm text-muted-foreground">
-                Access geography resources including maps, research papers, educational content, and study guides. All materials are available in English for students and educators in the geography department.
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-8">
+                <div className="p-4 rounded-lg bg-card/50 border">
+                  <h3 className="font-semibold mb-2">Educational Resources</h3>
+                  <p className="text-sm text-muted-foreground">Access comprehensive study materials and learning resources</p>
+                </div>
+                <div className="p-4 rounded-lg bg-card/50 border">
+                  <h3 className="font-semibold mb-2">Exam Materials</h3>
+                  <p className="text-sm text-muted-foreground">Browse past papers and examination resources</p>
+                </div>
+                <div className="p-4 rounded-lg bg-card/50 border">
+                  <h3 className="font-semibold mb-2">Geography Content</h3>
+                  <p className="text-sm text-muted-foreground">Explore maps, research papers, and geographic data</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground mt-6">
+                All materials are available in English for students and educators in the geography department. Access geography resources including maps, research papers, educational content, and study guides.
+              </p>
+              <p className="text-xs text-muted-foreground/70 mt-4">
+                © 2025 TASSA Geography Department. All rights reserved.
               </p>
             </div>
           </footer>
