@@ -12,6 +12,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ThemeProvider } from "next-themes";
 import { toast } from "@/hooks/use-toast";
 import { AdSenseUnit } from "@/components/AdSenseUnit";
+import { VisitorCounter } from "@/components/VisitorCounter";
 
 interface Material {
   id: string;
@@ -113,23 +114,24 @@ const Index = () => {
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <div className="min-h-screen bg-background">
         {/* Header */}
-        <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
-          <div className="container mx-auto px-4 py-5">
-            <div className="flex items-center justify-between">
+        <header className="border-b bg-card/50 backdrop-blur-md sticky top-0 z-50 shadow-lg">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center space-x-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold text-xl shadow-lg">
+                <div className="flex items-center gap-3 animate-fade-in">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary via-accent to-primary animate-[gradient_3s_ease_infinite] flex items-center justify-center text-primary-foreground font-bold text-2xl shadow-xl ring-2 ring-primary/20">
                     T
                   </div>
                   <div>
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-[gradient_3s_ease_infinite]">
                       TASSA Materials Portal
                     </h1>
-                    <span className="text-sm text-muted-foreground">Geography Department</span>
+                    <span className="text-xs md:text-sm text-muted-foreground font-medium">Geography Department</span>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center gap-3 flex-wrap">
+                <VisitorCounter />
                 <ThemeToggle />
                 <AdminLogin isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
               </div>
