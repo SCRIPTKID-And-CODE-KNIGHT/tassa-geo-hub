@@ -97,20 +97,41 @@ export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCa
   const styles = getCategoryStyles(material.category);
 
   return (
-    <Card className="group relative overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 animate-fade-in border-2 bg-gradient-to-br from-card to-card/50">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-accent/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+    <Card className="group relative overflow-hidden hover:shadow-2xl transition-all duration-500 hover:scale-[1.03] hover:-translate-y-2 animate-fade-in border border-primary/20 bg-gradient-to-br from-card via-card to-card/80 backdrop-blur-sm">
+      {/* Animated gradient border effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-20 transition-opacity duration-500 animate-[gradient_3s_ease_infinite]" style={{ backgroundSize: '200% 200%' }} />
       
-      <CardHeader className="pb-4 relative">
+      {/* Corner accent */}
+      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary/30 via-accent/20 to-transparent rounded-bl-full opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+      
+      {/* Tech grid pattern */}
+      <div className="absolute inset-0 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-500"
+        style={{
+          backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
+          backgroundSize: '20px 20px'
+        }}
+      />
+      
+      {/* Glowing orb effect */}
+      <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      
+      <CardHeader className="pb-4 relative z-10">
+        {/* Tech accent line */}
+        <div className="absolute top-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-500" />
+        
         <div className="flex items-start gap-3 mb-3">
-          <div className={`p-3 rounded-xl ${styles.iconBg} transition-transform group-hover:scale-110 duration-300`}>
-            <CategoryIcon className={`w-6 h-6 ${styles.iconColor}`} />
+          <div className={`relative p-3 rounded-xl ${styles.iconBg} transition-all group-hover:scale-110 group-hover:rotate-3 duration-300 shadow-lg`}>
+            {/* Icon glow */}
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/50 to-accent/50 opacity-0 group-hover:opacity-50 blur-md transition-opacity duration-500" />
+            <CategoryIcon className={`w-6 h-6 ${styles.iconColor} relative z-10`} />
           </div>
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-lg font-semibold leading-tight mb-2 group-hover:text-primary transition-colors">
+            <CardTitle className="text-lg font-semibold leading-tight mb-2 group-hover:text-primary transition-colors duration-300 relative">
               {material.title}
+              {/* Underline effect */}
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-500" />
             </CardTitle>
-            <Badge className={`${styles.badge} border font-medium`} variant="secondary">
+            <Badge className={`${styles.badge} border font-medium shadow-sm hover:shadow-md transition-shadow`} variant="secondary">
               {material.category}
             </Badge>
           </div>
@@ -137,26 +158,35 @@ export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCa
         </div>
       </CardHeader>
       
-      <CardContent className="pt-0 relative">
-        <div className="flex justify-between items-center text-sm text-muted-foreground mb-4 pb-4 border-b">
-          <span className="flex items-center gap-1">
-            📅 {format(new Date(material.upload_date), 'MMM dd, yyyy')}
+      <CardContent className="pt-0 relative z-10">
+        <div className="flex justify-between items-center text-sm text-muted-foreground mb-4 pb-4 border-b border-primary/10">
+          <span className="flex items-center gap-2 font-mono">
+            <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
+            {format(new Date(material.upload_date), 'MMM dd, yyyy')}
           </span>
-          <div className="flex items-center gap-1.5 bg-muted/50 px-2 py-1 rounded-full">
-            <Eye className="w-4 h-4" />
-            <span className="font-medium">{viewCount}</span>
+          <div className="flex items-center gap-2 bg-gradient-to-r from-primary/10 to-accent/10 px-3 py-1.5 rounded-full border border-primary/20 backdrop-blur-sm">
+            <Eye className="w-4 h-4 text-primary" />
+            <span className="font-mono font-semibold text-foreground">{viewCount}</span>
           </div>
         </div>
+        
         <Button 
           onClick={handleLinkClick}
-          className="w-full group/btn relative overflow-hidden"
+          className="w-full group/btn relative overflow-hidden bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl transition-all duration-300"
           variant="default"
           size="lg"
         >
-          <span className="relative z-10 flex items-center justify-center gap-2">
-            <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-            View Material
+          {/* Button shine effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
+          
+          <span className="relative z-10 flex items-center justify-center gap-2 font-semibold">
+            <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform duration-300" />
+            Access Material
           </span>
+          
+          {/* Corner decorations */}
+          <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-white/50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+          <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-white/50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
         </Button>
       </CardContent>
     </Card>

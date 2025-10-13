@@ -214,9 +214,16 @@ const Index = () => {
           <AdSenseUnit />
 
           {/* Materials Grid */}
-          <div className="mb-6">
-            <h3 className="text-2xl font-bold mb-2">Available Materials</h3>
-            <p className="text-muted-foreground mb-6">Browse and download geography resources</p>
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-1 h-8 bg-gradient-to-b from-primary to-accent rounded-full" />
+              <h3 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                Available Materials
+              </h3>
+            </div>
+            <p className="text-muted-foreground mb-6 ml-5 font-mono text-sm">
+              // Browse and download geography resources
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             {filteredMaterials.map((material, index) => (
