@@ -190,9 +190,22 @@ const Index = () => {
 
           {filteredMaterials.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No materials found matching your criteria.</p>
+              <p className="text-muted-foreground">No materials found matching your criteria. Try adjusting your search terms or browse all available geography resources.</p>
             </div>
           )}
+          
+          {/* Additional content for language detection */}
+          <footer className="mt-12 pt-8 border-t">
+            <div className="text-center space-y-4">
+              <h2 className="text-xl font-semibold">About TASSA Materials Portal</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Welcome to the TASSA Geography Department Materials Portal. This platform provides access to educational resources, study materials, and geographic information for students and educators. Browse our comprehensive collection of geography materials organized by category.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Access geography resources including maps, research papers, educational content, and study guides. All materials are available in English for students and educators in the geography department.
+              </p>
+            </div>
+          </footer>
 
           {/* AdSense - After content */}
           <AdSenseUnit />
