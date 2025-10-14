@@ -109,7 +109,7 @@ export function AdminLogin({ isAdmin, setIsAdmin }: AdminLoginProps) {
           </Button>
         </form>
         <p className="text-sm text-muted-foreground text-center">
-          Demo: admin / admin123
+          FOR AUTHORIZED ACCESS ONLY
         </p>
       </DialogContent>
     </Dialog>
