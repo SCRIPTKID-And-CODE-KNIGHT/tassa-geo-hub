@@ -224,7 +224,7 @@ const Index = () => {
           <div className="mb-6 overflow-hidden bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-lg border border-primary/20 py-3">
             <div className="animate-marquee whitespace-nowrap">
               <p className="text-center text-sm md:text-base font-medium inline-block px-4">
-                📚 Need any geography materials? Contact the admin on WhatsApp:{' '}
+                📚 Need any geography materials? Contact on WhatsApp:{' '}
                 <a 
                   href="https://wa.me/255756377013" 
                   target="_blank" 
