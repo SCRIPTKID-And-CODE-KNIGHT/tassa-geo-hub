@@ -69,8 +69,8 @@ const RequestMaterial = () => {
       // Send email via EmailJS
       try {
         await emailjs.send(
-          'YOUR_SERVICE_ID',
-          'YOUR_TEMPLATE_ID',
+          'service_whl7gmi',
+          'template_f1u9w3k',
           {
             to_email: 'technociphernet@gmail.com',
             phone_number: result.data.phone_number,
