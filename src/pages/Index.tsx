@@ -148,6 +148,11 @@ const Index = () => {
               </div>
               <div className="flex items-center gap-3 flex-wrap">
                 <VisitorCounter />
+                <Link to="/faq">
+                  <Button variant="ghost" size="sm">
+                    FAQ
+                  </Button>
+                </Link>
                 <Link to="/request-material">
                   <Button variant="default" size="sm" className="bg-gradient-to-r from-primary to-accent">
                     Request Material

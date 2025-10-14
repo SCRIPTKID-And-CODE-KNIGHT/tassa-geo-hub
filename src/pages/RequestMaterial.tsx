@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Send } from "lucide-react";
 import { z } from "zod";
+import emailjs from '@emailjs/browser';
 import geographyIcon from "@/assets/geography-icon.png";
 
 const requestSchema = z.object({
@@ -64,6 +65,23 @@ const RequestMaterial = () => {
         });
 
       if (error) throw error;
+
+      // Send email via EmailJS
+      try {
+        await emailjs.send(
+          'YOUR_SERVICE_ID',
+          'YOUR_TEMPLATE_ID',
+          {
+            to_email: 'technociphernet@gmail.com',
+            phone_number: result.data.phone_number,
+            material_description: result.data.material_description,
+            from_name: 'TASSA Materials Portal'
+          },
+          'YOUR_PUBLIC_KEY'
+        );
+      } catch (emailError) {
+        console.error('Email sending failed:', emailError);
+      }
 
       toast({
         title: "Request submitted successfully!",
