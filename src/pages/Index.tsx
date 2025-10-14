@@ -213,17 +213,32 @@ const Index = () => {
           {/* AdSense - Before content */}
           <AdSenseUnit />
 
+          {/* Contact Banner */}
+          <div className="mb-8 overflow-hidden bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-lg border border-primary/20 py-4">
+            <div className="animate-[slide-in-right_20s_linear_infinite]">
+              <p className="text-center text-sm md:text-base font-medium whitespace-nowrap">
+                📚 Need any geography materials? Contact the admin on WhatsApp:{' '}
+                <a 
+                  href="https://wa.me/255756377013" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-accent underline font-semibold transition-colors"
+                >
+                  +255 756 377 013
+                </a>
+                {' '}for assistance 🌍
+              </p>
+            </div>
+          </div>
+
           {/* Materials Grid */}
           <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-8 bg-gradient-to-b from-primary to-accent rounded-full" />
               <h3 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
                 Available Materials
               </h3>
             </div>
-            <p className="text-muted-foreground mb-6 ml-5 font-mono text-sm">
-              // Browse and download geography resources
-            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             {filteredMaterials.map((material, index) => (

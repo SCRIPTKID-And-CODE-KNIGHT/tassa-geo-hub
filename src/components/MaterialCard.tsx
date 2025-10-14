@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Eye, Edit, Trash2, FileText, BookOpen, ClipboardList, BarChart3, Trophy } from "lucide-react";
+import { ExternalLink, Edit, Trash2, FileText, BookOpen, ClipboardList, BarChart3, Trophy } from "lucide-react";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -159,15 +159,11 @@ export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCa
       </CardHeader>
       
       <CardContent className="pt-0 relative z-10">
-        <div className="flex justify-between items-center text-sm text-muted-foreground mb-4 pb-4 border-b border-primary/10">
+        <div className="flex justify-center items-center text-sm text-muted-foreground mb-4 pb-4 border-b border-primary/10">
           <span className="flex items-center gap-2 font-mono">
             <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
             {format(new Date(material.upload_date), 'MMM dd, yyyy')}
           </span>
-          <div className="flex items-center gap-2 bg-gradient-to-r from-primary/10 to-accent/10 px-3 py-1.5 rounded-full border border-primary/20 backdrop-blur-sm">
-            <Eye className="w-4 h-4 text-primary" />
-            <span className="font-mono font-semibold text-foreground">{viewCount}</span>
-          </div>
         </div>
         
         <Button 
