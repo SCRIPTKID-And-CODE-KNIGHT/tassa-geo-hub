@@ -70,7 +70,11 @@ export default {
           },
           to: {
             height: "var(--radix-accordion-content-height)",
-          },
+        },
+        marquee: {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
         },
         "accordion-up": {
           from: {
@@ -117,6 +121,7 @@ export default {
         "fade-in": "fade-in 0.5s ease-out",
         "scale-in": "scale-in 0.3s ease-out",
         gradient: "gradient 3s ease infinite",
+        "marquee": "marquee 25s linear infinite",
       },
     },
   },

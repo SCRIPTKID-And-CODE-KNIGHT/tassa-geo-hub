@@ -59,6 +59,33 @@ export type Database = {
         }
         Relationships: []
       }
+      material_requests: {
+        Row: {
+          created_at: string
+          id: string
+          material_description: string
+          phone_number: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          material_description: string
+          phone_number: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          material_description?: string
+          phone_number?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       materials: {
         Row: {
           category: Database["public"]["Enums"]["material_category"]

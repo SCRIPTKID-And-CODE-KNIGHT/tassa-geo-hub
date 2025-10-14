@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { MaterialCard } from "@/components/MaterialCard";
+import { Button } from "@/components/ui/button";
 import { SearchFilter } from "@/components/SearchFilter";
 import { MaterialDialog } from "@/components/MaterialDialog";
 import { AdminLogin } from "@/components/AdminLogin";
@@ -146,6 +148,11 @@ const Index = () => {
               </div>
               <div className="flex items-center gap-3 flex-wrap">
                 <VisitorCounter />
+                <Link to="/request-material">
+                  <Button variant="default" size="sm" className="bg-gradient-to-r from-primary to-accent">
+                    Request Material
+                  </Button>
+                </Link>
                 <ThemeToggle />
                 <AdminLogin isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
               </div>
@@ -176,12 +183,10 @@ const Index = () => {
           </div>
         </section>
 
-        <div className="container mx-auto px-4 py-6 relative z-10">
-          {/* AdSense - Top of page */}
-          <AdSenseUnit format="horizontal" />
+        <div className="container mx-auto px-4 py-4 relative z-10">
           
           {/* Announcements */}
-          <div className="mb-6">
+          <div className="mb-4">
             <AnnouncementBanner 
               isAdmin={isAdmin} 
               onRefresh={fetchMaterials}
@@ -190,7 +195,7 @@ const Index = () => {
 
           {/* Admin Dashboard */}
           {isAdmin && (
-            <div className="mb-6 space-y-4">
+            <div className="mb-4 space-y-4">
               <div className="flex flex-wrap gap-2">
                 <MaterialDialog onSuccess={fetchMaterials} />
                 <AnnouncementDialog onSuccess={fetchMaterials} />
@@ -210,13 +215,10 @@ const Index = () => {
             setSortOrder={setSortOrder}
           />
 
-          {/* AdSense - Before content */}
-          <AdSenseUnit />
-
           {/* Contact Banner */}
-          <div className="mb-8 overflow-hidden bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-lg border border-primary/20 py-4">
-            <div className="animate-[slide-in-right_20s_linear_infinite]">
-              <p className="text-center text-sm md:text-base font-medium whitespace-nowrap">
+          <div className="mb-6 overflow-hidden bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-lg border border-primary/20 py-3">
+            <div className="animate-marquee whitespace-nowrap">
+              <p className="text-center text-sm md:text-base font-medium inline-block px-4">
                 📚 Need any geography materials? Contact the admin on WhatsApp:{' '}
                 <a 
                   href="https://wa.me/255756377013" 
@@ -232,15 +234,15 @@ const Index = () => {
           </div>
 
           {/* Materials Grid */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-6">
+          <div className="mb-6">
+            <div className="flex items-center gap-3 mb-4">
               <div className="w-1 h-8 bg-gradient-to-b from-primary to-accent rounded-full" />
               <h3 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
                 Available Materials
               </h3>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-6">
             {filteredMaterials.map((material, index) => (
               <div key={material.id} style={{ animationDelay: `${index * 0.05}s` }}>
                 <MaterialCard
@@ -260,7 +262,7 @@ const Index = () => {
           )}
           
           {/* Additional content for language detection */}
-          <footer className="mt-16 pt-8 border-t bg-gradient-to-b from-transparent to-muted/20">
+          <footer className="mt-12 pt-6 border-t bg-gradient-to-b from-transparent to-muted/20">
             <div className="text-center space-y-6 pb-8">
               <div className="flex justify-center mb-4">
                 <img 
