@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +8,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Send } from "lucide-react";
 import { z } from "zod";
-import emailjs from '@emailjs/browser';
 import geographyIcon from "@/assets/geography-icon.png";
 
 const requestSchema = z.object({
@@ -31,7 +29,7 @@ const RequestMaterial = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ phone_number?: string; material_description?: string }>({});
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
@@ -56,51 +54,27 @@ const RequestMaterial = () => {
 
     setIsSubmitting(true);
 
-    try {
-      const { error } = await supabase
-        .from('material_requests')
-        .insert({
-          phone_number: result.data.phone_number,
-          material_description: result.data.material_description,
-        });
+    // Format the WhatsApp message
+    const message = encodeURIComponent(
+      `New Geography Material Request:\nPhone Number (WhatsApp): ${phoneNumber}\nMaterial Description: ${materialDescription}`
+    );
 
-      if (error) throw error;
+    // WhatsApp number: Tanzania country code (255), no leading zero
+    const whatsappNumber = "255756377013";
+    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${message}`;
 
-      // Send email via EmailJS
-      try {
-        await emailjs.send(
-          'service_whl7gmi',
-          'template_f1u9w3k',
-          {
-            to_email: 'technociphernet@gmail.com',
-            phone_number: result.data.phone_number,
-            material_description: result.data.material_description,
-            from_name: 'TASSA Materials Portal'
-          },
-          'YOUR_PUBLIC_KEY'
-        );
-      } catch (emailError) {
-        console.error('Email sending failed:', emailError);
-      }
+    window.open(whatsappLink, "_blank");
 
-      toast({
-        title: "Request submitted successfully!",
-        description: "We'll contact you soon on WhatsApp.",
-      });
+    toast({
+      title: "WhatsApp chat opened!",
+      description: "Please send your request via WhatsApp.",
+    });
 
-      setPhoneNumber("");
-      setMaterialDescription("");
-      
-      setTimeout(() => navigate('/'), 2000);
-    } catch (error: any) {
-      toast({
-        title: "Error submitting request",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    setPhoneNumber("");
+    setMaterialDescription("");
+    setIsSubmitting(false);
+    // Optionally navigate home after a delay
+    // setTimeout(() => navigate('/'), 3000);
   };
 
   return (
@@ -128,7 +102,7 @@ const RequestMaterial = () => {
               Request Geography Material
             </CardTitle>
             <CardDescription className="text-base">
-              Can't find what you're looking for? Fill out this form and our admin will contact you via WhatsApp
+              Can't find what you're looking for? Fill out this form and WhatsApp will open with your request ready to send.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -177,7 +151,7 @@ const RequestMaterial = () => {
                 size="lg"
               >
                 <Send className="w-4 h-4 mr-2" />
-                {isSubmitting ? "Submitting..." : "Submit Request"}
+                {isSubmitting ? "Preparing WhatsApp..." : "Open WhatsApp"}
               </Button>
             </form>
           </CardContent>
