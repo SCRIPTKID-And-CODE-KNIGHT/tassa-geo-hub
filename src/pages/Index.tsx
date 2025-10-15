@@ -18,6 +18,10 @@ import { VisitorCounter } from "@/components/VisitorCounter";
 import heroBackground from "@/assets/hero-background.jpg";
 import geographyIcon from "@/assets/geography-icon.png";
 import patternBackground from "@/assets/pattern-background.png";
+import mountain1 from "@/assets/mountain-1.jpg";
+import landscape1 from "@/assets/landscape-1.jpg";
+import mountain2 from "@/assets/mountain-2.jpg";
+import landscape2 from "@/assets/landscape-2.jpg";
 
 interface Material {
   id: string;
@@ -297,6 +301,44 @@ const Index = () => {
               <p className="text-sm text-muted-foreground mt-6">
                 All materials are available in English for students and educators in the geography department. Access geography resources including maps, research papers, educational content, and study guides.
               </p>
+              
+              {/* Landscape Gallery */}
+              <div className="mt-8 mb-6">
+                <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Geography in View
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                    <img 
+                      src={mountain1} 
+                      alt="Snow-capped mountain peaks" 
+                      className="w-full h-40 object-cover hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                    <img 
+                      src={landscape1} 
+                      alt="Green valley landscape" 
+                      className="w-full h-40 object-cover hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                    <img 
+                      src={mountain2} 
+                      alt="Mountain range at sunset" 
+                      className="w-full h-40 object-cover hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+                    <img 
+                      src={landscape2} 
+                      alt="Hills and natural terrain" 
+                      className="w-full h-40 object-cover hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                </div>
+              </div>
+              
               <p className="text-xs text-muted-foreground/70 mt-4">
                 © 2025 TASSA Geography Department. All rights reserved.
               </p>
