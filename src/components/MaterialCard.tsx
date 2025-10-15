@@ -159,14 +159,7 @@ export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCa
       </CardHeader>
       
       <CardContent className="pt-0 relative z-10">
-        <div className="flex justify-center items-center text-sm text-muted-foreground mb-4 pb-4 border-b border-primary/10">
-          <span className="flex items-center gap-2 font-mono">
-            <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
-            {format(new Date(material.upload_date), 'MMM dd, yyyy')}
-          </span>
-        </div>
-        
-        <Button 
+        <Button
           onClick={handleLinkClick}
           className="w-full group/btn relative overflow-hidden bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl transition-all duration-300"
           variant="default"

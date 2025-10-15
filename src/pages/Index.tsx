@@ -149,7 +149,7 @@ const Index = () => {
               <div className="flex items-center gap-3 flex-wrap">
                 <VisitorCounter />
                 <Link to="/faq">
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_20px_rgba(59,130,246,0.7)]">
                     FAQ
                   </Button>
                 </Link>
