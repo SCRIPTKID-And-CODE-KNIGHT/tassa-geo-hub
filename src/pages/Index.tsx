@@ -221,33 +221,19 @@ const Index = () => {
           />
 
           {/* Contact Banner */}
-          <div className="mb-6 overflow-hidden bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-lg border border-primary/20 py-3">
-            <div className="flex animate-marquee whitespace-nowrap">
-              <p className="text-sm md:text-base font-medium inline-block px-8">
-                📚 Need any geography materials? Contact on WhatsApp:{' '}
-                <a 
-                  href="https://wa.me/255756377013" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary hover:text-accent underline font-semibold transition-colors"
-                >
-                  +255 756 377 013
-                </a>
-                {' '}for assistance 🌍
-              </p>
-              <p className="text-sm md:text-base font-medium inline-block px-8">
-                📚 Need any geography materials? Contact on WhatsApp:{' '}
-                <a 
-                  href="https://wa.me/255756377013" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary hover:text-accent underline font-semibold transition-colors"
-                >
-                  +255 756 377 013
-                </a>
-                {' '}for assistance 🌍
-              </p>
-            </div>
+          <div className="mb-6 overflow-hidden bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-lg border border-primary/20 py-3 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+            <p className="text-center text-sm md:text-base font-medium">
+              📚 Need any geography materials? Contact on WhatsApp:{' '}
+              <a 
+                href="https://wa.me/255756377013" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:text-accent underline font-semibold transition-colors"
+              >
+                +255 756 377 013
+              </a>
+              {' '}for assistance 🌍
+            </p>
           </div>
 
           {/* Materials Grid */}
