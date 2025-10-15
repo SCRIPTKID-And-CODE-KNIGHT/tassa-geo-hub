@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react';
 import { Users } from 'lucide-react';
 
 export const VisitorCounter = () => {
-  const [count, setCount] = useState(218);
+  const [count, setCount] = useState(18);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Randomly increment by 1-3 visitors every 3-8 seconds
-      const increment = Math.floor(Math.random() * 3) + 1;
-      setCount(prev => prev + increment);
-    }, Math.random() * 5000 + 3000);
+      // Randomly increment by 1 visitor, max 20
+      setCount(prev => {
+        const newCount = prev + 1;
+        return newCount > 20 ? 20 : newCount;
+      });
+    }, Math.random() * 1000 + 500);
 
     return () => clearInterval(interval);
   }, []);
