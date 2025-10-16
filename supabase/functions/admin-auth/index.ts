@@ -28,7 +28,19 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    const { action, username, password, materialData, announcementData, materialId, announcementId, newUsername, newPassword } = await req.json()
+    const { 
+      action, 
+      username, 
+      password, 
+      materialData, 
+      announcementData, 
+      materialId, 
+      announcementId, 
+      newUsername, 
+      newPassword,
+      premiumCode,
+      userId
+    } = await req.json()
 
     switch (action) {
       case 'login':
@@ -141,6 +153,72 @@ Deno.serve(async (req) => {
 
         if (createAdminError) throw createAdminError
         return new Response(JSON.stringify({ success: true }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+
+      case 'set_premium_code':
+        // Delete existing code for this material if any
+        await supabaseClient
+          .from('premium_codes')
+          .delete()
+          .eq('material_id', materialId)
+
+        // Insert new premium code
+        const { error: premiumCodeError } = await supabaseClient
+          .from('premium_codes')
+          .insert({
+            material_id: materialId,
+            code: premiumCode
+          })
+
+        if (premiumCodeError) throw premiumCodeError
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+
+      case 'validate_premium_code':
+        // Check if code is valid for this material
+        const { data: codeData, error: codeError } = await supabaseClient
+          .from('premium_codes')
+          .select('*')
+          .eq('material_id', materialId)
+          .eq('code', premiumCode)
+          .single()
+
+        if (codeError || !codeData) {
+          return new Response(JSON.stringify({ valid: false, error: 'Invalid code' }), {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          })
+        }
+
+        // Record user access
+        const { error: accessError } = await supabaseClient
+          .from('user_premium_access')
+          .upsert({
+            user_id: userId,
+            material_id: materialId,
+            code_used: premiumCode
+          }, {
+            onConflict: 'user_id,material_id'
+          })
+
+        if (accessError) throw accessError
+
+        return new Response(JSON.stringify({ valid: true, success: true }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+
+      case 'check_premium_access':
+        // Check if user already has access
+        const { data: accessData } = await supabaseClient
+          .from('user_premium_access')
+          .select('*')
+          .eq('user_id', userId)
+          .eq('material_id', materialId)
+          .single()
+
+        return new Response(JSON.stringify({ hasAccess: !!accessData }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })
 

@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Edit, Trash2, FileText, BookOpen, ClipboardList, BarChart3, Trophy } from "lucide-react";
+import { ExternalLink, Edit, Trash2, FileText, BookOpen, ClipboardList, BarChart3, Trophy, Crown } from "lucide-react";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { PremiumCodeDialog } from "./PremiumCodeDialog";
 
 interface Material {
   id: string;
@@ -14,6 +15,7 @@ interface Material {
   google_drive_link: string;
   upload_date: string;
   view_count: number;
+  is_premium?: boolean;
 }
 
 interface MaterialCardProps {
@@ -25,6 +27,38 @@ interface MaterialCardProps {
 
 export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCardProps) {
   const [viewCount, setViewCount] = useState(material.view_count);
+  const [hasAccess, setHasAccess] = useState(false);
+  const [checkingAccess, setCheckingAccess] = useState(false);
+
+  useEffect(() => {
+    if (material.is_premium && !isAdmin) {
+      checkPremiumAccess();
+    }
+  }, [material.id, material.is_premium, isAdmin]);
+
+  const checkPremiumAccess = async () => {
+    setCheckingAccess(true);
+    try {
+      const userId = localStorage.getItem('user_id') || crypto.randomUUID();
+      if (!localStorage.getItem('user_id')) {
+        localStorage.setItem('user_id', userId);
+      }
+
+      const { data } = await supabase.functions.invoke('admin-auth', {
+        body: {
+          action: 'check_premium_access',
+          materialId: material.id,
+          userId
+        }
+      });
+
+      setHasAccess(data?.hasAccess || false);
+    } catch (error) {
+      console.error('Error checking access:', error);
+    } finally {
+      setCheckingAccess(false);
+    }
+  };
 
   const handleLinkClick = async () => {
     // Increment view count
@@ -126,11 +160,19 @@ export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCa
             <CategoryIcon className={`w-6 h-6 ${styles.iconColor} relative z-10`} />
           </div>
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-lg font-semibold leading-tight mb-2 group-hover:text-primary transition-colors duration-300 relative">
-              {material.title}
-              {/* Underline effect */}
-              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-500" />
-            </CardTitle>
+            <div className="flex items-center gap-2 mb-2">
+              <CardTitle className="text-lg font-semibold leading-tight group-hover:text-primary transition-colors duration-300 relative">
+                {material.title}
+                {/* Underline effect */}
+                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-500" />
+              </CardTitle>
+              {material.is_premium && (
+                <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white border-0 shadow-md">
+                  <Crown className="w-3 h-3 mr-1" />
+                  Premium
+                </Badge>
+              )}
+            </div>
             <Badge className={`${styles.badge} border font-medium shadow-sm hover:shadow-md transition-shadow`} variant="secondary">
               {material.category}
             </Badge>
@@ -159,24 +201,33 @@ export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCa
       </CardHeader>
       
       <CardContent className="pt-0 relative z-10">
-        <Button
-          onClick={handleLinkClick}
-          className="w-full group/btn relative overflow-hidden bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl transition-all duration-300"
-          variant="default"
-          size="lg"
-        >
-          {/* Button shine effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
-          
-          <span className="relative z-10 flex items-center justify-center gap-2 font-semibold">
-            <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform duration-300" />
-            Access Material
-          </span>
-          
-          {/* Corner decorations */}
-          <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-white/50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-          <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-white/50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-        </Button>
+        {material.is_premium && !isAdmin && !hasAccess ? (
+          <PremiumCodeDialog 
+            materialId={material.id} 
+            materialTitle={material.title}
+            onSuccess={checkPremiumAccess}
+          />
+        ) : (
+          <Button
+            onClick={handleLinkClick}
+            className="w-full group/btn relative overflow-hidden bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl transition-all duration-300"
+            variant="default"
+            size="lg"
+            disabled={checkingAccess}
+          >
+            {/* Button shine effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
+            
+            <span className="relative z-10 flex items-center justify-center gap-2 font-semibold">
+              <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform duration-300" />
+              {checkingAccess ? 'Checking...' : 'Access Material'}
+            </span>
+            
+            {/* Corner decorations */}
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-white/50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-white/50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
