@@ -92,6 +92,7 @@ export type Database = {
           created_at: string
           google_drive_link: string
           id: string
+          is_premium: boolean
           title: string
           updated_at: string
           upload_date: string
@@ -102,6 +103,7 @@ export type Database = {
           created_at?: string
           google_drive_link: string
           id?: string
+          is_premium?: boolean
           title: string
           updated_at?: string
           upload_date?: string
@@ -112,12 +114,77 @@ export type Database = {
           created_at?: string
           google_drive_link?: string
           id?: string
+          is_premium?: boolean
           title?: string
           updated_at?: string
           upload_date?: string
           view_count?: number
         }
         Relationships: []
+      }
+      premium_codes: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          material_id: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          material_id: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          material_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "premium_codes_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_premium_access: {
+        Row: {
+          accessed_at: string
+          code_used: string
+          id: string
+          material_id: string
+          user_id: string
+        }
+        Insert: {
+          accessed_at?: string
+          code_used: string
+          id?: string
+          material_id: string
+          user_id: string
+        }
+        Update: {
+          accessed_at?: string
+          code_used?: string
+          id?: string
+          material_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_premium_access_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materials"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
