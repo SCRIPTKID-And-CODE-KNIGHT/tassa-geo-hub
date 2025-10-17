@@ -129,6 +129,8 @@ export type Database = {
           id: string
           material_id: string
           updated_at: string
+          used_at: string | null
+          used_by: string | null
         }
         Insert: {
           code: string
@@ -136,6 +138,8 @@ export type Database = {
           id?: string
           material_id: string
           updated_at?: string
+          used_at?: string | null
+          used_by?: string | null
         }
         Update: {
           code?: string
@@ -143,6 +147,8 @@ export type Database = {
           id?: string
           material_id?: string
           updated_at?: string
+          used_at?: string | null
+          used_by?: string | null
         }
         Relationships: [
           {

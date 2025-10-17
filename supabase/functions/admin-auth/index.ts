@@ -79,12 +79,14 @@ Deno.serve(async (req) => {
         })
 
       case 'create_material':
-        const { error: createError } = await supabaseClient
+        const { data: newMaterial, error: createError } = await supabaseClient
           .from('materials')
           .insert(materialData)
+          .select()
+          .single()
 
         if (createError) throw createError
-        return new Response(JSON.stringify({ success: true }), {
+        return new Response(JSON.stringify({ success: true, material: newMaterial }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })
 
@@ -157,13 +159,7 @@ Deno.serve(async (req) => {
         })
 
       case 'set_premium_code':
-        // Delete existing code for this material if any
-        await supabaseClient
-          .from('premium_codes')
-          .delete()
-          .eq('material_id', materialId)
-
-        // Insert new premium code
+        // Insert new premium code (allow multiple codes per material)
         const { error: premiumCodeError } = await supabaseClient
           .from('premium_codes')
           .insert({
@@ -177,20 +173,32 @@ Deno.serve(async (req) => {
         })
 
       case 'validate_premium_code':
-        // Check if code is valid for this material
+        // Check if code is valid for this material and not yet used
         const { data: codeData, error: codeError } = await supabaseClient
           .from('premium_codes')
           .select('*')
           .eq('material_id', materialId)
           .eq('code', premiumCode)
+          .is('used_by', null)
           .single()
 
         if (codeError || !codeData) {
-          return new Response(JSON.stringify({ valid: false, error: 'Invalid code' }), {
+          return new Response(JSON.stringify({ valid: false, error: 'Invalid or already used code' }), {
             status: 400,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
           })
         }
+
+        // Mark code as used
+        const { error: updateCodeError } = await supabaseClient
+          .from('premium_codes')
+          .update({
+            used_by: userId,
+            used_at: new Date().toISOString()
+          })
+          .eq('id', codeData.id)
+
+        if (updateCodeError) throw updateCodeError
 
         // Record user access
         const { error: accessError } = await supabaseClient
@@ -219,6 +227,32 @@ Deno.serve(async (req) => {
           .single()
 
         return new Response(JSON.stringify({ hasAccess: !!accessData }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+
+      case 'get_material_codes':
+        // Get all codes for a material with usage status
+        const { data: codes, error: codesError } = await supabaseClient
+          .from('premium_codes')
+          .select('*')
+          .eq('material_id', materialId)
+          .order('created_at', { ascending: false })
+
+        if (codesError) throw codesError
+
+        return new Response(JSON.stringify({ codes }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+
+      case 'delete_premium_code':
+        const { codeId } = await req.json()
+        const { error: deleteCodeError } = await supabaseClient
+          .from('premium_codes')
+          .delete()
+          .eq('id', codeId)
+
+        if (deleteCodeError) throw deleteCodeError
+        return new Response(JSON.stringify({ success: true }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })
 

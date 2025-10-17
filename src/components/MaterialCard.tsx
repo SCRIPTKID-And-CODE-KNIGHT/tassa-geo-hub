@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { PremiumCodeDialog } from "./PremiumCodeDialog";
+import { ManageCodesDialog } from "./ManageCodesDialog";
 
 interface Material {
   id: string;
@@ -200,7 +201,7 @@ export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCa
         </div>
       </CardHeader>
       
-      <CardContent className="pt-0 relative z-10">
+      <CardContent className="pt-0 relative z-10 space-y-2">
         {material.is_premium && !isAdmin && !hasAccess ? (
           <PremiumCodeDialog 
             materialId={material.id} 
@@ -227,6 +228,13 @@ export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCa
             <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-white/50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
             <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-white/50 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
           </Button>
+        )}
+        
+        {isAdmin && material.is_premium && (
+          <ManageCodesDialog 
+            materialId={material.id}
+            materialTitle={material.title}
+          />
         )}
       </CardContent>
     </Card>

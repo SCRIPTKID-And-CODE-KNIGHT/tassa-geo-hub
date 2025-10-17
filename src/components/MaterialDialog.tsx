@@ -92,7 +92,11 @@ export function MaterialDialog({ material, onSuccess }: MaterialDialogProps) {
 
       // If premium and code is provided, set the premium code
       if (isPremium && premiumCode.trim()) {
-        const targetMaterialId = material?.id || materialResult?.id;
+        const targetMaterialId = material?.id || materialResult?.material?.id;
+        
+        if (!targetMaterialId) {
+          throw new Error('Failed to get material ID');
+        }
         
         const { error: codeError } = await supabase.functions.invoke('admin-auth', {
           body: {
