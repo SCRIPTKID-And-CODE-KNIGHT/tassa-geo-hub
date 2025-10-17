@@ -69,7 +69,6 @@ const Index = () => {
   const filterAndSortMaterials = () => {
     let filtered = materials;
 
-    // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(material =>
         material.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -77,12 +76,10 @@ const Index = () => {
       );
     }
 
-    // Filter by category
     if (selectedCategory !== 'All Categories') {
       filtered = filtered.filter(material => material.category === selectedCategory);
     }
 
-    // Sort materials
     filtered = filtered.sort((a, b) => {
       const dateA = new Date(a.upload_date).getTime();
       const dateB = new Date(b.upload_date).getTime();
@@ -121,7 +118,7 @@ const Index = () => {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className="min-h-screen bg-background relative">
+      <div className="min-h-screen bg-background relative scroll-smooth">
         {/* Background Pattern */}
         <div 
           className="fixed inset-0 opacity-5 pointer-events-none"
@@ -131,35 +128,52 @@ const Index = () => {
             backgroundRepeat: 'repeat'
           }}
         />
-        {/* Header */}
-        <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-50 shadow-lg relative">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center gap-3 animate-fade-in">
-                  <img 
-                    src={geographyIcon} 
-                    alt="TASSA Geography" 
-                    className="w-12 h-12 rounded-xl shadow-xl ring-2 ring-primary/20 hover:scale-110 transition-transform"
-                  />
-                  <div>
-                    <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-[gradient_3s_ease_infinite]">
-                      TASSA Materials Portal
-                    </h1>
-                    <span className="text-xs md:text-sm text-muted-foreground font-medium">Geography Department Resources</span>
-                  </div>
+        
+        {/* Fixed Navbar */}
+        <header className="border-b bg-card/95 backdrop-blur-lg fixed top-0 w-full z-50 shadow-lg">
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 animate-fade-in">
+                <img 
+                  src={geographyIcon} 
+                  alt="TASSA Geography" 
+                  className="w-10 h-10 rounded-xl shadow-xl ring-2 ring-primary/20 hover:scale-110 transition-transform"
+                />
+                <div>
+                  <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                    TASSA Materials
+                  </h1>
+                  <span className="hidden md:block text-xs text-muted-foreground">Geography Resources</span>
                 </div>
               </div>
-              <div className="flex items-center gap-3 flex-wrap">
+              
+              {/* Navigation Links */}
+              <nav className="hidden lg:flex items-center gap-1">
+                <a href="#home" className="px-4 py-2 text-sm font-medium hover:text-primary transition-colors rounded-md hover:bg-accent/10">
+                  Home
+                </a>
+                <a href="#about" className="px-4 py-2 text-sm font-medium hover:text-primary transition-colors rounded-md hover:bg-accent/10">
+                  About
+                </a>
+                <a href="#materials" className="px-4 py-2 text-sm font-medium hover:text-primary transition-colors rounded-md hover:bg-accent/10">
+                  Materials
+                </a>
+                <a href="#gallery" className="px-4 py-2 text-sm font-medium hover:text-primary transition-colors rounded-md hover:bg-accent/10">
+                  Gallery
+                </a>
+                <a href="#contact" className="px-4 py-2 text-sm font-medium hover:text-primary transition-colors rounded-md hover:bg-accent/10">
+                  Contact
+                </a>
+              </nav>
+              
+              <div className="flex items-center gap-2">
                 <VisitorCounter />
                 <Link to="/faq">
-                  <Button variant="ghost" size="sm" className="shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_20px_rgba(59,130,246,0.7)]">
-                    FAQ
-                  </Button>
+                  <Button variant="ghost" size="sm">FAQ</Button>
                 </Link>
                 <Link to="/request-material">
                   <Button variant="default" size="sm" className="bg-gradient-to-r from-primary to-accent">
-                    Request Material
+                    Request
                   </Button>
                 </Link>
                 <ThemeToggle />
@@ -170,30 +184,84 @@ const Index = () => {
         </header>
 
         {/* Hero Section */}
-        <section className="relative overflow-hidden">
+        <section id="home" className="relative overflow-hidden pt-20 min-h-[90vh] flex items-center">
           <div 
-            className="absolute inset-0 opacity-20"
+            className="absolute inset-0 opacity-30"
             style={{
               backgroundImage: `url(${heroBackground})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
-          <div className="container mx-auto px-4 py-12 relative z-10">
-            <div className="text-center space-y-4 animate-fade-in">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
+          <div className="container mx-auto px-4 py-20 relative z-10">
+            <div className="text-center space-y-6 animate-fade-in max-w-4xl mx-auto">
+              <div className="inline-block px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4 animate-scale-in">
+                <span className="text-sm font-semibold text-primary">🌍 Geography Department</span>
+              </div>
+              <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-[gradient_3s_ease_infinite] leading-tight">
                 Explore Geography Materials
               </h2>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                 Access comprehensive educational resources, exam materials, and study guides for geography students and educators
               </p>
+              <div className="flex flex-wrap gap-4 justify-center mt-8">
+                <a href="#materials">
+                  <Button size="lg" className="bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:scale-105 transition-all">
+                    Browse Materials
+                  </Button>
+                </a>
+                <a href="#about">
+                  <Button size="lg" variant="outline" className="hover:scale-105 transition-all">
+                    Learn More
+                  </Button>
+                </a>
+              </div>
             </div>
           </div>
         </section>
 
-        <div className="container mx-auto px-4 py-4 relative z-10">
-          
+        {/* About Section */}
+        <section id="about" className="py-20 bg-muted/30 relative z-10">
+          <div className="container mx-auto px-4">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-12 animate-fade-in">
+                <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  About TASSA Portal
+                </h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Your comprehensive source for geography education and research materials
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-6 rounded-xl bg-card border border-border hover:border-primary/50 transition-all hover:shadow-lg group animate-fade-in">
+                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <span className="text-2xl">📚</span>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Educational Resources</h3>
+                  <p className="text-muted-foreground">Access comprehensive study materials and learning resources for all levels</p>
+                </div>
+                <div className="p-6 rounded-xl bg-card border border-border hover:border-primary/50 transition-all hover:shadow-lg group animate-fade-in" style={{animationDelay: '0.1s'}}>
+                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <span className="text-2xl">📝</span>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Exam Materials</h3>
+                  <p className="text-muted-foreground">Browse past papers and examination resources to excel in your studies</p>
+                </div>
+                <div className="p-6 rounded-xl bg-card border border-border hover:border-primary/50 transition-all hover:shadow-lg group animate-fade-in" style={{animationDelay: '0.2s'}}>
+                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <span className="text-2xl">🗺️</span>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Geography Content</h3>
+                  <p className="text-muted-foreground">Explore maps, research papers, and comprehensive geographic data</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="container mx-auto px-4 py-8 relative z-10">
           {/* Announcements */}
           <div className="mb-4">
             <AnnouncementBanner 
@@ -224,31 +292,18 @@ const Index = () => {
             setSortOrder={setSortOrder}
           />
 
-          {/* Contact Banner */}
-          <div className="mb-6 overflow-hidden bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-lg border border-primary/20 py-3 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-            <p className="text-center text-sm md:text-base font-medium">
-              📚 Need any geography materials? Contact on WhatsApp:{' '}
-              <a 
-                href="https://wa.me/255756377013" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-primary hover:text-accent underline font-semibold transition-colors"
-              >
-                +255 756 377 013
-              </a>
-              {' '}for assistance 🌍
-            </p>
-          </div>
-
-          {/* Materials Grid */}
-          <div className="mb-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-1 h-8 bg-gradient-to-b from-primary to-accent rounded-full" />
-              <h3 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+          {/* Materials Section */}
+          <section id="materials" className="mb-12">
+            <div className="text-center mb-12 animate-fade-in">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 Available Materials
-              </h3>
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Browse our comprehensive collection of geography resources
+              </p>
             </div>
-          </div>
+          </section>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-6">
             {filteredMaterials.map((material, index) => (
               <div key={material.id} style={{ animationDelay: `${index * 0.05}s` }}>
@@ -267,84 +322,132 @@ const Index = () => {
               <p className="text-muted-foreground">No materials found matching your criteria. Try adjusting your search terms or browse all available geography resources.</p>
             </div>
           )}
-          
-          {/* Additional content for language detection */}
-          <footer className="mt-12 pt-6 border-t bg-gradient-to-b from-transparent to-muted/20">
-            <div className="text-center space-y-6 pb-8">
+        </div>
+        
+        {/* Gallery Section */}
+        <section id="gallery" className="py-20 bg-muted/30 relative z-10">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12 animate-fade-in">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Geography in View
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Explore the beauty and diversity of our planet's landscapes
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              <div className="group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all animate-fade-in">
+                <div className="relative overflow-hidden">
+                  <img 
+                    src={mountain1} 
+                    alt="Snow-capped mountain peaks" 
+                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <p className="text-sm font-medium">Mountain Peaks</p>
+                  </div>
+                </div>
+              </div>
+              <div className="group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all animate-fade-in" style={{animationDelay: '0.1s'}}>
+                <div className="relative overflow-hidden">
+                  <img 
+                    src={landscape1} 
+                    alt="Green valley landscape" 
+                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <p className="text-sm font-medium">Valley Landscape</p>
+                  </div>
+                </div>
+              </div>
+              <div className="group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all animate-fade-in" style={{animationDelay: '0.2s'}}>
+                <div className="relative overflow-hidden">
+                  <img 
+                    src={mountain2} 
+                    alt="Mountain range at sunset" 
+                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <p className="text-sm font-medium">Sunset Range</p>
+                  </div>
+                </div>
+              </div>
+              <div className="group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all animate-fade-in" style={{animationDelay: '0.3s'}}>
+                <div className="relative overflow-hidden">
+                  <img 
+                    src={landscape2} 
+                    alt="Hills and natural terrain" 
+                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <p className="text-sm font-medium">Natural Terrain</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="py-20 relative z-10">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12 animate-fade-in">
+                <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Get in Touch
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                  Need specific geography materials? We're here to help
+                </p>
+              </div>
+              
+              <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 rounded-2xl border border-primary/20 p-8 md:p-12 shadow-xl animate-fade-in">
+                <div className="text-center space-y-6">
+                  <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto">
+                    <span className="text-3xl">💬</span>
+                  </div>
+                  <h3 className="text-2xl font-bold">Contact Us on WhatsApp</h3>
+                  <p className="text-muted-foreground max-w-2xl mx-auto">
+                    Have questions or need assistance finding specific materials? Reach out to us directly and we'll help you find what you need.
+                  </p>
+                  <a 
+                    href="https://wa.me/255756377013" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    <Button size="lg" className="bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:scale-105 transition-all">
+                      <span className="mr-2">📱</span>
+                      +255 756 377 013
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="py-12 border-t bg-muted/30 relative z-10">
+          <div className="container mx-auto px-4">
+            <div className="text-center space-y-4">
               <div className="flex justify-center mb-4">
                 <img 
                   src={geographyIcon} 
                   alt="TASSA Geography" 
-                  className="w-16 h-16 rounded-xl shadow-lg"
+                  className="w-12 h-12 rounded-xl shadow-lg"
                 />
               </div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                About TASSA Materials Portal
-              </h2>
-              <p className="text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Welcome to the TASSA Geography Department Materials Portal. This platform provides access to educational resources, study materials, and geographic information for students and educators. Browse our comprehensive collection of geography materials organized by category including lesson notes, textbooks, examination papers, and statistical data.
+              <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+                Welcome to the TASSA Geography Department Materials Portal. Access educational resources, study materials, and geographic information for students and educators.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-8">
-                <div className="p-4 rounded-lg bg-card/50 border">
-                  <h3 className="font-semibold mb-2">Educational Resources</h3>
-                  <p className="text-sm text-muted-foreground">Access comprehensive study materials and learning resources</p>
-                </div>
-                <div className="p-4 rounded-lg bg-card/50 border">
-                  <h3 className="font-semibold mb-2">Exam Materials</h3>
-                  <p className="text-sm text-muted-foreground">Browse past papers and examination resources</p>
-                </div>
-                <div className="p-4 rounded-lg bg-card/50 border">
-                  <h3 className="font-semibold mb-2">Geography Content</h3>
-                  <p className="text-sm text-muted-foreground">Explore maps, research papers, and geographic data</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground mt-6">
-                All materials are available in English for students and educators in the geography department. Access geography resources including maps, research papers, educational content, and study guides.
-              </p>
-              
-              {/* Landscape Gallery */}
-              <div className="mt-8 mb-6">
-                <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Geography in View
-                </h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-                    <img 
-                      src={mountain1} 
-                      alt="Snow-capped mountain peaks" 
-                      className="w-full h-40 object-cover hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-                    <img 
-                      src={landscape1} 
-                      alt="Green valley landscape" 
-                      className="w-full h-40 object-cover hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-                    <img 
-                      src={mountain2} 
-                      alt="Mountain range at sunset" 
-                      className="w-full h-40 object-cover hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-                    <img 
-                      src={landscape2} 
-                      alt="Hills and natural terrain" 
-                      className="w-full h-40 object-cover hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              <p className="text-xs text-muted-foreground/70 mt-4">
+              <p className="text-xs text-muted-foreground/70">
                 © 2025 TASSA Geography Department. All rights reserved.
               </p>
             </div>
-          </footer>
+          </div>
+        </footer>
 
+        <div className="container mx-auto px-4 relative z-10">
           {/* AdSense - After content */}
           <AdSenseUnit />
         </div>
