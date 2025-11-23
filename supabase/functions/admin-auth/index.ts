@@ -1,15 +1,24 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 
-// Simple password comparison for demo - in production use proper bcrypt
+// Proper bcrypt password comparison
 async function comparePassword(plaintext: string, hash: string): Promise<boolean> {
-  // For demo purposes, we'll do a simple comparison
-  // In production, you'd want proper bcrypt comparison
-  return plaintext === 'admin123' && hash.includes('$2b$');
+  try {
+    return await bcrypt.compare(plaintext, hash);
+  } catch (error) {
+    console.error('Password comparison error:', error);
+    return false;
+  }
 }
 
+// Proper bcrypt password hashing
 async function hashPassword(password: string): Promise<string> {
-  // For demo purposes - in production use proper bcrypt
-  return `$2b$10$${btoa(password).slice(0, 53)}`;
+  try {
+    return await bcrypt.hash(password);
+  } catch (error) {
+    console.error('Password hashing error:', error);
+    throw new Error('Failed to hash password');
+  }
 }
 
 const corsHeaders = {
