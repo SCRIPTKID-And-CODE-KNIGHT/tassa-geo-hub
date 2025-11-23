@@ -9,11 +9,12 @@ import { useToast } from "@/hooks/use-toast";
 interface PremiumCodeDialogProps {
   materialId: string;
   materialTitle: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   onSuccess: () => void;
 }
 
-export function PremiumCodeDialog({ materialId, materialTitle, onSuccess }: PremiumCodeDialogProps) {
-  const [open, setOpen] = useState(false);
+export function PremiumCodeDialog({ materialId, materialTitle, open, onOpenChange, onSuccess }: PremiumCodeDialogProps) {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -47,7 +48,7 @@ export function PremiumCodeDialog({ materialId, materialTitle, onSuccess }: Prem
           title: "Success!",
           description: "Premium access granted. You can now view this material.",
         });
-        setOpen(false);
+        onOpenChange(false);
         setCode("");
         onSuccess();
       } else {
@@ -70,13 +71,7 @@ export function PremiumCodeDialog({ materialId, materialTitle, onSuccess }: Prem
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="w-full" variant="default">
-          <Lock className="mr-2 h-4 w-4" />
-          Enter Premium Code
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Premium Material: {materialTitle}</DialogTitle>

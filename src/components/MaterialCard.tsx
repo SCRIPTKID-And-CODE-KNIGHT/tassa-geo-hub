@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Edit, Trash2, FileText, BookOpen, ClipboardList, BarChart3, Trophy, Crown } from "lucide-react";
+import { ExternalLink, Edit, Trash2, FileText, BookOpen, ClipboardList, BarChart3, Trophy, Crown, Lock } from "lucide-react";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { PremiumCodeDialog } from "./PremiumCodeDialog";
 import { ManageCodesDialog } from "./ManageCodesDialog";
+import { PaymentRequestDialog } from "./PaymentRequestDialog";
 
 interface Material {
   id: string;
@@ -30,6 +31,8 @@ export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCa
   const [viewCount, setViewCount] = useState(material.view_count);
   const [hasAccess, setHasAccess] = useState(false);
   const [checkingAccess, setCheckingAccess] = useState(false);
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [showCodeDialog, setShowCodeDialog] = useState(false);
 
   useEffect(() => {
     if (material.is_premium && !isAdmin) {
@@ -203,11 +206,44 @@ export function MaterialCard({ material, isAdmin, onEdit, onDelete }: MaterialCa
       
       <CardContent className="pt-0 relative z-10 space-y-2">
         {material.is_premium && !isAdmin && !hasAccess ? (
-          <PremiumCodeDialog 
-            materialId={material.id} 
-            materialTitle={material.title}
-            onSuccess={checkPremiumAccess}
-          />
+          <div className="space-y-2">
+            <Button 
+              onClick={() => setShowPaymentDialog(true)}
+              className="w-full bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-600 hover:to-amber-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+              size="lg"
+            >
+              <Crown className="w-4 h-4 mr-2" />
+              Request Premium Access (3000/=)
+            </Button>
+            
+            <Button
+              onClick={() => setShowCodeDialog(true)}
+              variant="outline"
+              className="w-full"
+            >
+              <Lock className="w-4 h-4 mr-2" />
+              I Have an Access Code
+            </Button>
+
+            <PaymentRequestDialog
+              materialId={material.id}
+              materialTitle={material.title}
+              open={showPaymentDialog}
+              onOpenChange={setShowPaymentDialog}
+              onCodeEntry={() => {
+                setShowPaymentDialog(false);
+                setShowCodeDialog(true);
+              }}
+            />
+
+            <PremiumCodeDialog
+              materialId={material.id}
+              materialTitle={material.title}
+              open={showCodeDialog}
+              onOpenChange={setShowCodeDialog}
+              onSuccess={checkPremiumAccess}
+            />
+          </div>
         ) : (
           <Button
             onClick={handleLinkClick}
