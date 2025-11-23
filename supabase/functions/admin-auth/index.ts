@@ -1,25 +1,4 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
-
-// Proper bcrypt password comparison
-async function comparePassword(plaintext: string, hash: string): Promise<boolean> {
-  try {
-    return await bcrypt.compare(plaintext, hash);
-  } catch (error) {
-    console.error('Password comparison error:', error);
-    return false;
-  }
-}
-
-// Proper bcrypt password hashing
-async function hashPassword(password: string): Promise<string> {
-  try {
-    return await bcrypt.hash(password);
-  } catch (error) {
-    console.error('Password hashing error:', error);
-    throw new Error('Failed to hash password');
-  }
-}
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -53,30 +32,20 @@ Deno.serve(async (req) => {
 
     switch (action) {
       case 'login':
-        // Authenticate admin
+        // Authenticate admin using PostgreSQL's crypt function
         console.log('Login attempt for username:', username)
         
-        const { data: adminUser, error: fetchError } = await supabaseClient
-          .from('admin_users')
-          .select('*')
-          .eq('username', username)
-          .single()
-
-        console.log('Fetch result:', { adminUser, fetchError })
-
-        if (fetchError || !adminUser) {
-          console.log('User not found or fetch error')
-          return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
-            status: 401,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        // Use pgcrypto's crypt function to verify password directly in the database
+        const { data: authResult, error: authError } = await supabaseClient
+          .rpc('verify_admin_password', {
+            p_username: username,
+            p_password: password
           })
-        }
 
-        const passwordMatch = await comparePassword(password, adminUser.password_hash)
-        console.log('Password comparison result:', passwordMatch)
+        console.log('Auth result:', { authResult, authError })
 
-        if (!passwordMatch) {
-          console.log('Password does not match')
+        if (authError || !authResult) {
+          console.log('Authentication failed')
           return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
             status: 401,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -154,12 +123,11 @@ Deno.serve(async (req) => {
         })
 
       case 'create_admin':
-        const hashedPassword = await hashPassword(newPassword)
-        const { error: createAdminError } = await supabaseClient
-          .from('admin_users')
-          .insert({
-            username: newUsername,
-            password_hash: hashedPassword
+        // Use PostgreSQL's crypt function to hash the password
+        const { data: newAdmin, error: createAdminError } = await supabaseClient
+          .rpc('create_admin_user', {
+            p_username: newUsername,
+            p_password: newPassword
           })
 
         if (createAdminError) throw createAdminError
