@@ -200,7 +200,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_admin_user: {
+        Args: { p_password: string; p_username: string }
+        Returns: boolean
+      }
+      verify_admin_password: {
+        Args: { p_password: string; p_username: string }
+        Returns: boolean
+      }
     }
     Enums: {
       material_category:
