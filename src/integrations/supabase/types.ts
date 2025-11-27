@@ -14,208 +14,16 @@ export type Database = {
   }
   public: {
     Tables: {
-      admin_users: {
-        Row: {
-          created_at: string
-          id: string
-          password_hash: string
-          username: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          password_hash: string
-          username: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          password_hash?: string
-          username?: string
-        }
-        Relationships: []
-      }
-      announcements: {
-        Row: {
-          created_at: string
-          id: string
-          is_pinned: boolean
-          message: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          is_pinned?: boolean
-          message: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          is_pinned?: boolean
-          message?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      material_requests: {
-        Row: {
-          created_at: string
-          id: string
-          material_description: string
-          phone_number: string
-          status: string
-          updated_at: string
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          material_description: string
-          phone_number: string
-          status?: string
-          updated_at?: string
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          material_description?: string
-          phone_number?: string
-          status?: string
-          updated_at?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      materials: {
-        Row: {
-          category: Database["public"]["Enums"]["material_category"]
-          created_at: string
-          google_drive_link: string
-          id: string
-          is_premium: boolean
-          title: string
-          updated_at: string
-          upload_date: string
-          view_count: number
-        }
-        Insert: {
-          category: Database["public"]["Enums"]["material_category"]
-          created_at?: string
-          google_drive_link: string
-          id?: string
-          is_premium?: boolean
-          title: string
-          updated_at?: string
-          upload_date?: string
-          view_count?: number
-        }
-        Update: {
-          category?: Database["public"]["Enums"]["material_category"]
-          created_at?: string
-          google_drive_link?: string
-          id?: string
-          is_premium?: boolean
-          title?: string
-          updated_at?: string
-          upload_date?: string
-          view_count?: number
-        }
-        Relationships: []
-      }
-      premium_codes: {
-        Row: {
-          code: string
-          created_at: string
-          id: string
-          material_id: string
-          updated_at: string
-          used_at: string | null
-          used_by: string | null
-        }
-        Insert: {
-          code: string
-          created_at?: string
-          id?: string
-          material_id: string
-          updated_at?: string
-          used_at?: string | null
-          used_by?: string | null
-        }
-        Update: {
-          code?: string
-          created_at?: string
-          id?: string
-          material_id?: string
-          updated_at?: string
-          used_at?: string | null
-          used_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "premium_codes_material_id_fkey"
-            columns: ["material_id"]
-            isOneToOne: false
-            referencedRelation: "materials"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_premium_access: {
-        Row: {
-          accessed_at: string
-          code_used: string
-          id: string
-          material_id: string
-          user_id: string
-        }
-        Insert: {
-          accessed_at?: string
-          code_used: string
-          id?: string
-          material_id: string
-          user_id: string
-        }
-        Update: {
-          accessed_at?: string
-          code_used?: string
-          id?: string
-          material_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_premium_access_material_id_fkey"
-            columns: ["material_id"]
-            isOneToOne: false
-            referencedRelation: "materials"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      create_admin_user: {
-        Args: { p_password: string; p_username: string }
-        Returns: boolean
-      }
-      verify_admin_password: {
-        Args: { p_password: string; p_username: string }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
-      material_category:
-        | "Lesson Notes"
-        | "Geography Books"
-        | "Exams"
-        | "Results"
-        | "Statistics"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -342,14 +150,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      material_category: [
-        "Lesson Notes",
-        "Geography Books",
-        "Exams",
-        "Results",
-        "Statistics",
-      ],
-    },
+    Enums: {},
   },
 } as const
