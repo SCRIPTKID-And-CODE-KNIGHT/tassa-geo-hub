@@ -525,35 +525,146 @@ const Index = () => {
         </section>
 
         {/* Footer */}
-        <footer className="py-12 sm:py-16 border-t border-border/50 bg-muted/20 relative z-10">
-          <div className="container mx-auto px-4">
-            <div className="text-center space-y-6">
-              <div className="flex justify-center mb-4">
-                <div className="relative">
-                  <img 
-                    src={geographyIcon} 
-                    alt="TASSA LEARNING HUB" 
-                    className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl shadow-glow"
-                  />
-                  <div className="absolute -inset-2 bg-gradient-primary rounded-2xl opacity-20 blur-lg -z-10" />
+        <footer className="relative z-10 overflow-hidden">
+          {/* Top decorative wave */}
+          <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background to-transparent" />
+          
+          {/* Main footer content */}
+          <div className="relative bg-gradient-to-br from-primary/5 via-muted/50 to-accent/5 border-t border-border/30">
+            {/* Decorative elements */}
+            <div className="absolute top-10 left-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+            <div className="absolute bottom-10 right-10 w-48 h-48 bg-accent/10 rounded-full blur-3xl" />
+            
+            <div className="container mx-auto px-4 py-16 sm:py-20 relative">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-12">
+                {/* Brand Column */}
+                <div className="lg:col-span-1 text-center md:text-left">
+                  <div className="flex items-center justify-center md:justify-start gap-3 mb-5">
+                    <div className="relative">
+                      <img 
+                        src={geographyIcon} 
+                        alt="TASSA LEARNING HUB" 
+                        className="w-12 h-12 rounded-xl shadow-glow ring-2 ring-primary/20"
+                      />
+                      <div className="absolute -inset-1 bg-gradient-primary rounded-xl opacity-20 blur-sm -z-10" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-display font-bold text-gradient">
+                        TASSA LEARNING HUB
+                      </h3>
+                      <span className="text-xs text-muted-foreground">Geography Excellence</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto md:mx-0">
+                    Your comprehensive source for geography education and research materials for students and educators worldwide.
+                  </p>
+                </div>
+
+                {/* Quick Links */}
+                <div className="text-center md:text-left">
+                  <h4 className="font-display font-bold text-foreground mb-4 flex items-center justify-center md:justify-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                    Quick Links
+                  </h4>
+                  <ul className="space-y-3">
+                    {[
+                      { label: 'Home', href: '#home' },
+                      { label: 'About Us', href: '#about' },
+                      { label: 'Materials', href: '#materials' },
+                      { label: 'Gallery', href: '#gallery' },
+                      { label: 'Contact', href: '#contact' },
+                    ].map((link) => (
+                      <li key={link.label}>
+                        <a 
+                          href={link.href}
+                          className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 inline-flex items-center gap-1.5 group"
+                        >
+                          <span className="w-0 group-hover:w-2 h-0.5 bg-primary transition-all duration-200" />
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Resources */}
+                <div className="text-center md:text-left">
+                  <h4 className="font-display font-bold text-foreground mb-4 flex items-center justify-center md:justify-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                    Resources
+                  </h4>
+                  <ul className="space-y-3">
+                    {[
+                      { label: 'Lesson Notes', href: '#materials' },
+                      { label: 'Geography Books', href: '#materials' },
+                      { label: 'Past Exams', href: '#materials' },
+                      { label: 'Request Material', href: '/request-material', isRoute: true },
+                      { label: 'FAQ', href: '/faq', isRoute: true },
+                    ].map((link) => (
+                      <li key={link.label}>
+                        {link.isRoute ? (
+                          <Link 
+                            to={link.href}
+                            className="text-sm text-muted-foreground hover:text-accent transition-colors duration-200 inline-flex items-center gap-1.5 group"
+                          >
+                            <span className="w-0 group-hover:w-2 h-0.5 bg-accent transition-all duration-200" />
+                            {link.label}
+                          </Link>
+                        ) : (
+                          <a 
+                            href={link.href}
+                            className="text-sm text-muted-foreground hover:text-accent transition-colors duration-200 inline-flex items-center gap-1.5 group"
+                          >
+                            <span className="w-0 group-hover:w-2 h-0.5 bg-accent transition-all duration-200" />
+                            {link.label}
+                          </a>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Contact & Stats */}
+                <div className="text-center md:text-left">
+                  <h4 className="font-display font-bold text-foreground mb-4 flex items-center justify-center md:justify-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                    Get in Touch
+                  </h4>
+                  <div className="space-y-4">
+                    <a 
+                      href="https://wa.me/255756377013" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 border border-primary/20 rounded-xl text-sm font-medium text-primary transition-all duration-200 hover:scale-105"
+                    >
+                      <span>📱</span>
+                      +255 756 377 013
+                    </a>
+                    <p className="text-xs text-muted-foreground">
+                      Available Monday - Saturday<br />
+                      8:00 AM - 6:00 PM (EAT)
+                    </p>
+                    
+                    {/* Visitor Counter */}
+                    <div className="pt-2">
+                      <VisitorCounter />
+                    </div>
+                  </div>
                 </div>
               </div>
-              <h3 className="text-xl sm:text-2xl font-display font-bold text-gradient">
-                TASSA LEARNING HUB
-              </h3>
-              <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-                Your comprehensive source for geography education and research materials for students and educators.
-              </p>
-              
-              {/* Visitor Counter in Footer */}
-              <div className="flex justify-center py-4">
-                <VisitorCounter />
-              </div>
-              
-              <div className="pt-6 border-t border-border/50">
-                <p className="text-xs text-muted-foreground/60">
-                  © 2025 TASSA LEARNING HUB. All rights reserved.
-                </p>
+
+              {/* Bottom bar */}
+              <div className="pt-8 border-t border-border/30">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <p className="text-xs text-muted-foreground/70 text-center sm:text-left">
+                    © 2025 TASSA LEARNING HUB. All rights reserved.
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <span className="text-xs text-muted-foreground/50">Made with</span>
+                    <span className="text-primary animate-pulse">❤️</span>
+                    <span className="text-xs text-muted-foreground/50">for Geography lovers</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
