@@ -59,6 +59,36 @@ export type Database = {
         }
         Relationships: []
       }
+      login_attempts: {
+        Row: {
+          attempted_at: string
+          failure_reason: string | null
+          id: string
+          ip_address: string | null
+          success: boolean
+          user_agent: string | null
+          username: string
+        }
+        Insert: {
+          attempted_at?: string
+          failure_reason?: string | null
+          id?: string
+          ip_address?: string | null
+          success?: boolean
+          user_agent?: string | null
+          username: string
+        }
+        Update: {
+          attempted_at?: string
+          failure_reason?: string | null
+          id?: string
+          ip_address?: string | null
+          success?: boolean
+          user_agent?: string | null
+          username?: string
+        }
+        Relationships: []
+      }
       material_requests: {
         Row: {
           created_at: string

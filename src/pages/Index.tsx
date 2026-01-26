@@ -10,6 +10,7 @@ import { AnnouncementBanner } from "@/components/AnnouncementBanner";
 import { AnnouncementDialog } from "@/components/AnnouncementDialog";
 import { CreateAdminDialog } from "@/components/CreateAdminDialog";
 import { DashboardStats } from "@/components/DashboardStats";
+import { LoginAttemptsDialog } from "@/components/LoginAttemptsDialog";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ThemeProvider } from "next-themes";
 import { toast } from "@/hooks/use-toast";
@@ -346,6 +347,7 @@ const Index = () => {
                 <MaterialDialog onSuccess={fetchMaterials} />
                 <AnnouncementDialog onSuccess={fetchMaterials} />
                 <CreateAdminDialog />
+                <LoginAttemptsDialog />
               </div>
               <DashboardStats />
             </div>
