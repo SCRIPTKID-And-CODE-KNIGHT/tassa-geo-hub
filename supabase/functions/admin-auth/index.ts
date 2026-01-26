@@ -35,6 +35,10 @@ Deno.serve(async (req) => {
         // Authenticate admin using PostgreSQL's crypt function
         console.log('Login attempt for username:', username)
         
+        // Get IP and user agent from request headers
+        const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown'
+        const userAgent = req.headers.get('user-agent') || 'unknown'
+        
         // Use pgcrypto's crypt function to verify password directly in the database
         const { data: authResult, error: authError } = await supabaseClient
           .rpc('verify_admin_password', {
@@ -46,11 +50,29 @@ Deno.serve(async (req) => {
 
         if (authError || !authResult) {
           console.log('Authentication failed')
+          
+          // Log failed login attempt
+          await supabaseClient.from('login_attempts').insert({
+            username,
+            success: false,
+            ip_address: ipAddress,
+            user_agent: userAgent,
+            failure_reason: authError ? authError.message : 'Invalid credentials'
+          })
+          
           return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
             status: 401,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
           })
         }
+
+        // Log successful login attempt
+        await supabaseClient.from('login_attempts').insert({
+          username,
+          success: true,
+          ip_address: ipAddress,
+          user_agent: userAgent
+        })
 
         return new Response(JSON.stringify({ success: true }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -261,6 +283,38 @@ Deno.serve(async (req) => {
           .eq('id', codeId)
 
         if (deleteCodeError) throw deleteCodeError
+        return new Response(JSON.stringify({ success: true }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+
+      case 'get_login_attempts':
+        // Fetch login attempts with pagination
+        const { page = 1, limit = 50 } = await req.json().catch(() => ({ page: 1, limit: 50 }))
+        const offset = (page - 1) * limit
+        
+        const { data: attempts, error: attemptsError, count } = await supabaseClient
+          .from('login_attempts')
+          .select('*', { count: 'exact' })
+          .order('attempted_at', { ascending: false })
+          .range(offset, offset + limit - 1)
+
+        if (attemptsError) throw attemptsError
+        
+        return new Response(JSON.stringify({ attempts, total: count }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
+
+      case 'clear_login_attempts':
+        // Clear old login attempts (keep last 30 days)
+        const thirtyDaysAgo = new Date()
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+        
+        const { error: clearError } = await supabaseClient
+          .from('login_attempts')
+          .delete()
+          .lt('attempted_at', thirtyDaysAgo.toISOString())
+
+        if (clearError) throw clearError
         return new Response(JSON.stringify({ success: true }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         })
